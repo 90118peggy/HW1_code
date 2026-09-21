@@ -6,6 +6,8 @@
 
 `RecordingPredictor.predict_wav()` 接受完整 WAV，自動裁切並合併模型 logits；無須事先人工處理 test。此階段尚未訓練 CNN。
 
+遠端 RTX 3060 的實際結果見 [AUDIO_VALIDATION_REPORT.md](AUDIO_VALIDATION_REPORT.md)：2,292 個 WAV 雜湊核對通過、18 項音訊處理測試通過，A、B 的 train 標準化統計已完成。下方「本機實際檢查結果」保留第一步的檢查範圍。
+
 ## 資料擺放
 
 請自行將官方資料放在下列位置；Git 儲存庫不提供資料集。
