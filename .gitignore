@@ -1,0 +1,17 @@
+# 官方資料只存於本機或遠端運算環境，不隨程式上傳。
+/dataset_A/
+/dataset_B/
+
+# 環境、快取、權重與執行產物。
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.env
+.env.*
+.cache/
+/checkpoints/
+/reports/
+*.pt
+*.pth
+*.ckpt
