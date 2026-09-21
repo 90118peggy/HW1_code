@@ -10,12 +10,13 @@ from pathlib import Path
 import torch
 from torch import nn
 
-from audio_common import AudioConfig, NormalizationStats, read_records, training_fingerprint
-from audio_pipeline import (
-    AudioFrontend, HW1AudioDataset, LogMel, RecordingPredictor,
-    crop_waveform, fit_normalization, load_waveform, recording_logits,
+from data_pipeline.audio_common import AudioConfig, NormalizationStats, read_records, training_fingerprint
+from inference.predictor import RecordingPredictor, recording_logits
+from data_pipeline.audio_pipeline import (
+    AudioFrontend, HW1AudioDataset, LogMel,
+    crop_waveform, fit_normalization, load_waveform,
 )
-from inspect_dataset import LABELS
+from data_pipeline.inspect_dataset import LABELS
 
 
 class MeanModel(nn.Module):

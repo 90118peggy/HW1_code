@@ -8,9 +8,10 @@ import torch
 from torch import nn
 from torch.utils.data import DataLoader
 
-from audio_common import AudioConfig, NormalizationStats, read_records
-from audio_pipeline import (
-    AudioFrontend, HW1AudioDataset, LogMel, RecordingPredictor, crop_waveform, load_waveform,
+from data_pipeline.audio_common import AudioConfig, NormalizationStats, read_records
+from inference.predictor import RecordingPredictor
+from data_pipeline.audio_pipeline import (
+    AudioFrontend, HW1AudioDataset, LogMel, crop_waveform, load_waveform,
 )
 
 

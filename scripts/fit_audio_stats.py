@@ -5,13 +5,13 @@ from pathlib import Path
 
 import torch
 
-from audio_common import AudioConfig
-from audio_pipeline import fit_normalization
+from data_pipeline.audio_common import AudioConfig
+from data_pipeline.audio_pipeline import fit_normalization
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--data-root", type=Path, default=Path(__file__).resolve().parent)
+    parser.add_argument("--data-root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--dataset", choices=("A", "B", "both"), default="both")
     parser.add_argument("--output-dir", type=Path, default=Path("audio_stats"))
     parser.add_argument("--threads", type=int, default=2, help="CPU 計算執行緒數，避免過度占用")

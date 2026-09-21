@@ -1,51 +1,69 @@
 # 音樂分析 HW1
 
-已提供資料切分檢查與第二步音訊處理。`inspect_dataset.py` 只使用 Python 標準函式庫；音訊處理使用 PyTorch，可在遠端 CUDA GPU 執行。
+已提供資料切分檢查與第二步音訊處理。`data_pipeline/inspect_dataset.py` 只使用 Python 標準函式庫；音訊處理使用 PyTorch，可在遠端 CUDA GPU 執行。
 
-第二步的操作與逐段程式說明請讀 [AUDIO_PROCESSING_GUIDE.md](AUDIO_PROCESSING_GUIDE.md)。入口是 `fit_audio_stats.py` 與 `check_audio_pipeline.py`，套件列在 `requirements-audio.txt`。設定為 3.69 秒隨機訓練裁切、固定九段評估、128 mel 頻帶與 train 全域標準化。
+第二步的操作與逐段程式說明請讀 [AUDIO_PROCESSING_GUIDE.md](docs/AUDIO_PROCESSING_GUIDE.md)。入口是 `scripts/fit_audio_stats.py` 與 `scripts/check_audio_pipeline.py`，套件列在 `requirements-audio.txt`。設定為 3.69 秒隨機訓練裁切、固定九段評估、128 mel 頻帶與 train 全域標準化。
 
 `RecordingPredictor.predict_wav()` 接受完整 WAV，自動裁切並合併模型 logits；無須事先人工處理 test。此階段尚未訓練 CNN。
 
-遠端 RTX 3060 的實際結果見 [AUDIO_VALIDATION_REPORT.md](AUDIO_VALIDATION_REPORT.md)：2,292 個 WAV 雜湊核對通過、18 項音訊處理測試通過，A、B 的 train 標準化統計已完成。下方「本機實際檢查結果」保留第一步的檢查範圍。
+遠端 RTX 3060 的實際結果見 [AUDIO_VALIDATION_REPORT.md](docs/AUDIO_VALIDATION_REPORT.md)：2,292 個 WAV 雜湊核對通過、18 項音訊處理測試通過，A、B 的 train 標準化統計已完成。下方「本機實際檢查結果」保留第一步的檢查範圍。
 
-## 資料擺放
+## 專案架構
 
-請自行將官方資料放在下列位置；Git 儲存庫不提供資料集。
+各資料夾依功能分類；完整分工與檔案對照見 [PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md)。官方資料保留原位置，Git 儲存庫不提供資料集。
 
 ```text
 HW1_code/
-├── inspect_dataset.py
 ├── README.md
 ├── .gitignore
-├── tests/test_inspect_dataset.py
-├── dataset_A/                  # 不上傳
-│   ├── README.md               # 官方說明
-│   ├── manifest.csv            # 官方樣本清單，內含 split 與 label
-│   └── audio/                  # 1,290 個 WAV
-└── dataset_B/                  # 不上傳
-    ├── README.md
-    ├── manifest.csv
-    └── audio/                  # 1,002 個 WAV
+├── requirements-audio.txt
+├── data_pipeline/             # 官方資料檢查、WAV、裁切、頻譜、Dataset
+├── models/                    # 預留模型套件；尚未建立 CNN
+├── inference/                 # 多段分數合併、完整 WAV 預測
+├── scripts/                   # 計算統計與前處理檢查的執行入口
+├── tests/                     # 程式功能測試
+├── docs/                      # 操作、解釋與驗證文件
+├── dataset_A/                 # 官方 README、manifest.csv、audio/；不上傳
+├── dataset_B/                 # 官方 README、manifest.csv、audio/；不上傳
+├── audio_stats/               # train 統計 JSON；不上傳
+├── reports/                   # 檢查報告與頻譜圖；不上傳
+├── outputs/                   # checkpoints/、logs/、predictions/；預留
+└── inspect_dataset.py         # 舊版相容入口，真正實作在 data_pipeline/
 ```
+
+後續的 `models/short_chunk_cnn.py`、`scripts/train.py`、`scripts/evaluate.py`、`scripts/predict.py` 尚未建立，避免把空殼誤認為可執行的訓練程式。
+
+## 遠端快速執行
+
+在 VS Code 遠端終端機執行。既有 `audio_stats/` 可直接重用，不需要因資料夾整理而重算。
+
+```bash
+cd /workspace/HW1_code
+source /venv/main/bin/activate
+python -m scripts.check_audio_pipeline --dataset-dir dataset_A --stats audio_stats/dataset_A.json --device cuda
+python -m scripts.check_audio_pipeline --dataset-dir dataset_B --stats audio_stats/dataset_B.json --device cuda
+```
+
+使用 `python -m` 從專案根目錄執行，Python 才能找到 `data_pipeline` 與 `inference` 套件。
 
 ## 執行檢查
 
 在這個專案資料夾的終端機執行（若環境只提供 `python3`，以它替換 `python`）：
 
 ```bash
-python -X utf8 inspect_dataset.py
+python -X utf8 -m data_pipeline.inspect_dataset
 ```
 
 資料不在程式旁邊時，用 `--data-root` 指定「包含 dataset_A 和 dataset_B 的父資料夾」：
 
 ```bash
-python -X utf8 inspect_dataset.py --data-root /path/to/hw1_data
+python -X utf8 -m data_pipeline.inspect_dataset --data-root /path/to/hw1_data
 ```
 
 選擇另存完整檢查結果：
 
 ```bash
-python -X utf8 inspect_dataset.py --output reports/dataset_inspection.json
+python -X utf8 -m data_pipeline.inspect_dataset --output reports/dataset_inspection.json
 ```
 
 報告已存在時，請換一個輸出檔名；程式不覆寫既有檔案，也不允許把報告寫進官方資料夾。

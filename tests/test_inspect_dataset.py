@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from inspect_dataset import inspect_dataset
+from data_pipeline.inspect_dataset import inspect_dataset
 
 
 class InspectionTests(unittest.TestCase):

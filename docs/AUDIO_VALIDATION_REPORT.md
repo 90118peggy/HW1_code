@@ -78,4 +78,4 @@ validation/test 音訊未參與 mean/std 計算。其資料只用於檔案完整
 - 未修改官方切分、原始音訊或隱藏 test 標籤。
 - 尚未訓練 CNN，也未使用驗證集調整本版超參數。
 - 遠端原先未提交的 `audio_processing.py`、`requirements.txt`、`tests/test_audio_processing.py` 均保留，沒有覆寫。
-- 本次使用的模組是 `audio_common.py`、`audio_pipeline.py`，執行入口是 `fit_audio_stats.py` 與 `check_audio_pipeline.py`。
+- 上述驗證完成後，模組已整理至 `data_pipeline/`，推論移至 `inference/predictor.py`，執行入口移至 `scripts/`。前處理演算法及既有統計檔不變；新指令見 [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)。

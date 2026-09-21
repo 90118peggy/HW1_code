@@ -1,4 +1,4 @@
-"""完整 WAV → 裁切 → log-mel → 固定訓練統計標準化 → 模型分數合併。"""
+"""WAV 讀取、裁切、log-mel、固定訓練統計標準化與 Dataset。"""
 
 from dataclasses import asdict
 from pathlib import Path
@@ -9,20 +9,21 @@ from torch import nn
 from torch.nn import functional as F
 from torch.utils.data import Dataset
 
-from audio_common import (
+from data_pipeline.audio_common import (
     AudioConfig, NormalizationStats, RunningMoments, fixed_crop_starts,
     read_pcm16_wav, read_records, training_fingerprint,
 )
-from inspect_dataset import LABELS
+from data_pipeline.inspect_dataset import LABELS
 
 
 def load_waveform(path, config):
+    """回傳單聲道 float32 waveform；若取樣率不同，先重採樣。"""
     samples, rate = read_pcm16_wav(path)
     waveform = torch.frombuffer(samples, dtype=torch.float32).clone()
     if rate != config.sample_rate:
         # 帶低通濾波的重採樣，避免直接丟樣本造成混疊。
         from scipy.signal import resample_poly
-        divisor = math.gcd(rate, config.sample_rate)
+        divisor = math.gcd(rate, config.sample_rate) # 最大公因數，避免浮點除法誤差
         waveform = torch.from_numpy(resample_poly(
             waveform.numpy(), config.sample_rate // divisor, rate // divisor,
         ).copy()).float()
@@ -36,17 +37,18 @@ def crop_waveform(waveform, config, training=False, generator=None):
     if waveform.ndim != 1 or waveform.numel() == 0 or not torch.isfinite(waveform).all():
         raise ValueError("裁切輸入必須是非空、有限值的單聲道波形")
     size = config.crop_samples
-    last_start = max(0, waveform.numel() - size)
+    last_start = max(0, waveform.numel() - size) # 合法起點的最大值
     if training:
         # 包含最後合法起點；不在每次呼叫時重新設定 seed。
-        starts = [int(torch.randint(last_start + 1, (1,), generator=generator))]
+        starts = [int(torch.randint(last_start + 1, (1,), generator=generator))] # 隨機起點
     else:
         starts = fixed_crop_starts(waveform.numel(), size, config.eval_chunks)
-    padded = F.pad(waveform, (0, max(0, size - waveform.numel())))
+    padded = F.pad(waveform, (0, max(0, size - waveform.numel()))) # 右側補零
     return torch.stack([padded[start:start + size] for start in starts]), starts
 
 
 class LogMel(nn.Module):
+    """裁切 → STFT → mel 濾波器 → log10(power)。"""
     def __init__(self, config):
         super().__init__()
         self.config = config
@@ -55,7 +57,7 @@ class LogMel(nn.Module):
         def hz_to_mel(hz):
             return hz * 3 / 200 if hz < 1000 else 15 + math.log(hz / 1000) * 27 / math.log(6.4)
 
-        positions = torch.linspace(hz_to_mel(config.f_min), hz_to_mel(config.f_max), config.n_mels + 2)
+        positions = torch.linspace(hz_to_mel(config.f_min), hz_to_mel(config.f_max), config.n_mels + 2) # mel 頻率位置
         edges = torch.where(positions < 15, positions * 200 / 3,
                             1000 * torch.exp((positions - 15) * math.log(6.4) / 27))
         frequencies = torch.linspace(0, config.sample_rate / 2, config.n_fft // 2 + 1)
@@ -83,6 +85,7 @@ class LogMel(nn.Module):
 
 
 class AudioFrontend(nn.Module):
+    """裁切 → log-mel → 固定訓練統計標準化。"""
     def __init__(self, stats):
         super().__init__()
         self.config = AudioConfig(**stats.config)
@@ -149,45 +152,3 @@ class HW1AudioDataset(Dataset):
         if self.split != "test":
             item["target"] = self.class_to_index[row["label"]]
         return item
-
-
-def recording_logits(chunk_model, features):
-    """驗證用：[B,K,1,M,T] → [B,類別數]，每首歌先平均片段 logits。"""
-    if features.ndim != 5 or features.shape[2] != 1:
-        raise ValueError("輸入必須是 [batch, chunks, 1, mel, time]")
-    batch, chunks = features.shape[:2]
-    logits = chunk_model(features.flatten(0, 1))
-    if logits.ndim != 2 or logits.shape != (batch * chunks, 6) or not torch.isfinite(logits).all():
-        raise ValueError("片段模型必須回傳有限的 [batch*chunks, 6] logits")
-    return logits.reshape(batch, chunks, 6).mean(dim=1)
-
-
-class RecordingPredictor:
-    """未來 CNN 的完整 WAV 推論入口；呼叫者不用先人工裁切或轉頻譜。"""
-    def __init__(self, chunk_model, stats, device="cpu"):
-        self.device = torch.device(device)
-        self.model = chunk_model.to(self.device)
-        self.frontend = AudioFrontend(stats).to(self.device)
-        self.class_names = stats.class_names
-
-    @torch.inference_mode()
-    def predict_wav(self, path):
-        waveform = load_waveform(path, self.frontend.config)
-        chunks, starts = crop_waveform(waveform, self.frontend.config, training=False)
-        # 關閉 Dropout 和 BatchNorm 的訓練行為；結束後恢復模型原狀態。
-        was_training = self.model.training
-        self.model.eval()
-        try:
-            features = self.frontend(chunks.to(self.device))
-            logits = recording_logits(self.model, features.unsqueeze(0))[0]
-            probabilities = logits.softmax(dim=-1)
-            order = torch.argsort(probabilities, descending=True, stable=True)[:3]
-            return {
-                "top3_labels": [self.class_names[index] for index in order.tolist()],
-                "probabilities": probabilities.cpu().tolist(),
-                "class_names": list(self.class_names),
-                "logits": logits.cpu().tolist(),
-                "crop_start_seconds": [start / self.frontend.config.sample_rate for start in starts],
-            }
-        finally:
-            self.model.train(was_training)

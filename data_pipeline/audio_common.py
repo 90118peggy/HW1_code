@@ -10,16 +10,17 @@ from array import array
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
-from inspect_dataset import LABELS, SPLITS
+from data_pipeline.inspect_dataset import LABELS, SPLITS
 
 
 @dataclass(frozen=True)
 class AudioConfig:
+    """音訊設定。"""
     sample_rate: int = 24000
     crop_seconds: float = 3.69
-    eval_chunks: int = 9
-    n_fft: int = 1024
-    hop_length: int = 256
+    eval_chunks: int = 9  # 用於評估的音訊片段數量
+    n_fft: int = 1024 # 快速傅立葉變換的點數
+    hop_length: int = 256 # 每個音訊片段的跳躍長度
     n_mels: int = 128
     f_min: float = 0.0
     f_max: float = 12000.0

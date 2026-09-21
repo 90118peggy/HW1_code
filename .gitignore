@@ -17,3 +17,9 @@ __pycache__/
 *.pt
 *.pth
 *.ckpt
+
+# 保留產物資料夾結構，忽略實際訓練與預測產物。
+/outputs/*/*
+!/outputs/checkpoints/.gitkeep
+!/outputs/logs/.gitkeep
+!/outputs/predictions/.gitkeep

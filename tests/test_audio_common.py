@@ -10,11 +10,11 @@ import wave
 from dataclasses import asdict
 from pathlib import Path
 
-from audio_common import (
+from data_pipeline.audio_common import (
     AudioConfig, NormalizationStats, RunningMoments, fixed_crop_starts,
     read_pcm16_wav, read_records, training_fingerprint,
 )
-from inspect_dataset import LABELS
+from data_pipeline.inspect_dataset import LABELS
 
 
 class AudioCommonTests(unittest.TestCase):

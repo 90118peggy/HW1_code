@@ -70,7 +70,7 @@ logits 是模型尚未轉成機率的六個分數。本版依原計畫先平均 
 
 ## 4. 每個檔案負責什麼？
 
-### `audio_common.py`：設定、清單、WAV 與統計
+### `data_pipeline/audio_common.py`：設定、清單、WAV 與統計
 
 - `AudioConfig`：集中保存所有前處理設定，避免訓練和推論各寫一份而不同步。
 - `read_pcm16_wav()`：使用 Python 的 `wave` 讀取官方 signed PCM16 WAV，檢查空音訊與截斷檔。數值除以 32768，平均聲道成 mono。這是固定的 PCM 換算，沒有每首歌的音量正規化。
@@ -79,7 +79,7 @@ logits 是模型尚未轉成機率的六個分數。本版依原計畫先平均 
 - `RunningMoments`：每讀一首就合併數量、平均與平方離差和，最後得到全域母體標準差；不需要把所有頻譜一次放進 RAM 或 GPU。
 - `NormalizationStats`：保存 mean/std、完整音訊設定、類別順序、train 筆數與清單指紋。統計檔不允許覆寫既有檔案。
 
-### `audio_pipeline.py`：裁切、頻譜、資料集與推論
+### `data_pipeline/audio_pipeline.py`：裁切、頻譜與資料集
 
 - `load_waveform()`：將解碼結果轉為 float32 tensor。取樣率不同時，用 SciPy `resample_poly` 先低通濾波再重採樣，不直接改取樣率標籤或粗暴丟點。官方 24 kHz 資料不需要這一步。[SciPy 官方說明](https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.resample_poly.html)
 - `crop_waveform()`：train 每次讀取時重新抽起點，所以不同 epoch 可能看到同一首歌的不同位置；eval 永遠使用固定起點。不要在每次裁切函式裡重設 seed，否則會一直抽到相同段落。
@@ -87,6 +87,8 @@ logits 是模型尚未轉成機率的六個分數。本版依原計畫先平均 
 - `AudioFrontend`：用已保存的全域 mean/std 做標準化，增加 CNN 需要的單聲道維度。mean/std 存為 buffer，不會被梯度更新。
 - `fit_normalization()`：固定讀全部 train，每首用相同的九段流程估計頻譜統計。以 float64 累積，降低數值誤差；GPU 模式在 GPU 算 STFT、mel 與批次統計，CPU 負責檔案讀取與最後的小量合併。
 - `HW1AudioDataset`：方便交給 PyTorch DataLoader。train 回傳一段、validation/test 回傳九段。test 的字典沒有 `target` 欄位，避免把未知標籤當成真實訓練標籤。
+### `inference/predictor.py`：多段分數合併與完整 WAV 推論
+
 - `recording_logits()`：將 `[B,K,1,M,T]` 攤平送進片段模型，再還原成每首歌並平均 logits。
 - `RecordingPredictor.predict_wav()`：完整 WAV 的正式流程入口，自動完成讀取、裁切、頻譜、標準化、模型評估與 Top-3。推論時關閉 Dropout／BatchNorm 的訓練行為。
 
@@ -94,8 +96,8 @@ logits 是模型尚未轉成機率的六個分數。本版依原計畫先平均 
 
 ### 兩個可以直接執行的入口
 
-- `fit_audio_stats.py`：在遠端以全部 train 音訊建立 A、B 各一份統計 JSON。
-- `check_audio_pipeline.py`：用真實音訊列印形狀、畫頻譜，提供統計檔後再檢查 DataLoader 與完整 WAV 推論。它的 `DiagnosticModel` 只檢查接線，沒有分類能力，不能用來提交作業。
+- `scripts/fit_audio_stats.py`：在遠端以全部 train 音訊建立 A、B 各一份統計 JSON。
+- `scripts/check_audio_pipeline.py`：用真實音訊列印形狀、畫頻譜，提供統計檔後再檢查 DataLoader 與完整 WAV 推論。它的 `DiagnosticModel` 只檢查接線，沒有分類能力，不能用來提交作業。
 
 ## 5. 遠端如何執行？
 
@@ -113,18 +115,18 @@ python -m unittest discover -s tests -p test_audio_common.py -v
 python -m unittest discover -s tests -p test_audio_pipeline.py -v
 
 # 尚未標準化前，先檢查一首音訊
-python check_audio_pipeline.py --dataset-dir dataset_A --device cuda
+python -m scripts.check_audio_pipeline --dataset-dir dataset_A --device cuda
 
 # 分別從 A、B 全部 train 算 mean/std；不會讀 validation/test 音訊
-python fit_audio_stats.py --data-root . --dataset both --device cuda --output-dir audio_stats
+python -m scripts.fit_audio_stats --data-root . --dataset both --device cuda --output-dir audio_stats
 
 # 使用已保存的統計量檢查完整流程，並畫圖
-python check_audio_pipeline.py --dataset-dir dataset_A --stats audio_stats/dataset_A.json --device cuda --plot reports/dataset_A_spectrogram.png --report reports/dataset_A_pipeline.json
-python check_audio_pipeline.py --dataset-dir dataset_B --stats audio_stats/dataset_B.json --device cuda --plot reports/dataset_B_spectrogram.png --report reports/dataset_B_pipeline.json
+python -m scripts.check_audio_pipeline --dataset-dir dataset_A --stats audio_stats/dataset_A.json --device cuda --plot reports/dataset_A_spectrogram.png --report reports/dataset_A_pipeline.json
+python -m scripts.check_audio_pipeline --dataset-dir dataset_B --stats audio_stats/dataset_B.json --device cuda --plot reports/dataset_B_spectrogram.png --report reports/dataset_B_pipeline.json
 ```
 
 若統計檔或報告已存在，不必重算，直接使用；要另做實驗就換輸出目錄／檔名。
-GPU 計算不代表全部步驟都會在 GPU：硬碟讀取與 WAV 解碼仍是 CPU 工作，也可能成為速度瓶頸。
+GPU 計算不代表全部步驟都會在 GPU：硬碟讀取與 WAV 解碼仍是 CPU 工作。`HW1AudioDataset` 內的頻譜與標準化也在 CPU；未來訓練會把頻譜 batch 傳給 GPU 上的 CNN。`fit_normalization`、檢查程式的直接頻譜計算與 `RecordingPredictor` 則會依 `device` 使用 GPU。
 
 `requirements-audio.txt` 列出本版所需套件。已有可用 CUDA PyTorch 時，保留它，只補缺少的依賴，不要安裝 CPU wheel 去蓋掉 GPU build。
 
@@ -144,8 +146,9 @@ GPU 計算不代表全部步驟都會在 GPU：硬碟讀取與 WAV 解碼仍是 
 下列程式片段示意介面，`cnn` 將在下一階段建立：
 
 ```python
-from audio_common import NormalizationStats
-from audio_pipeline import HW1AudioDataset, RecordingPredictor, recording_logits
+from data_pipeline.audio_common import NormalizationStats
+from data_pipeline.audio_pipeline import HW1AudioDataset
+from inference.predictor import RecordingPredictor, recording_logits
 from torch.utils.data import DataLoader
 
 stats = NormalizationStats.load("audio_stats/dataset_A.json")

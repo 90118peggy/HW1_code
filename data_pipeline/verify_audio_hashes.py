@@ -5,12 +5,12 @@ import hashlib
 import json
 from pathlib import Path
 
-from audio_common import read_records
+from data_pipeline.audio_common import read_records
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--data-root", type=Path, default=Path(__file__).resolve().parent)
+    parser.add_argument("--data-root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     if args.output:
