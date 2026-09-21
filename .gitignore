@@ -12,6 +12,8 @@ __pycache__/
 .cache/
 /checkpoints/
 /reports/
+# 前處理統計需隨最終模型交付；開發時先不自動加入 Git。
+/audio_stats/
 *.pt
 *.pth
 *.ckpt

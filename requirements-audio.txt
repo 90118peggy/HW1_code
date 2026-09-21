@@ -1,0 +1,5 @@
+# 遠端既有 CUDA PyTorch 可直接使用，不指定 CPU wheel 或強制降版。
+torch>=2.1,<3
+numpy>=1.24
+scipy>=1.11
+matplotlib>=3.8

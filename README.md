@@ -1,6 +1,10 @@
 # 音樂分析 HW1
 
-目前只完成第一步：檢查資料與官方切分。使用 Python 3 標準函式庫，不需安裝第三方套件或使用 GPU。
+已提供資料切分檢查與第二步音訊處理。`inspect_dataset.py` 只使用 Python 標準函式庫；音訊處理使用 PyTorch，可在遠端 CUDA GPU 執行。
+
+第二步的操作與逐段程式說明請讀 [AUDIO_PROCESSING_GUIDE.md](AUDIO_PROCESSING_GUIDE.md)。入口是 `fit_audio_stats.py` 與 `check_audio_pipeline.py`，套件列在 `requirements-audio.txt`。設定為 3.69 秒隨機訓練裁切、固定九段評估、128 mel 頻帶與 train 全域標準化。
+
+`RecordingPredictor.predict_wav()` 接受完整 WAV，自動裁切並合併模型 logits；無須事先人工處理 test。此階段尚未訓練 CNN。
 
 ## 資料擺放
 
@@ -102,9 +106,9 @@ python -X utf8 inspect_dataset.py --output reports/dataset_inspection.json
 ## 檢查程式的測試
 
 ```bash
-python -X utf8 -m unittest discover -s tests -v
+python -X utf8 -m unittest discover -s tests -p test_inspect_dataset.py -v
 ```
 
 測試只在暫存資料夾建立模擬清單與空的佔位檔，不使用或修改官方音訊。
 
-本步沒有進行訓練、資料增強或標準化。下一步先理解清單讀取，再建立音訊載入流程。
+以上結果來自第一步資料檢查；第二步的標準化與推論整合另見音訊處理說明。
