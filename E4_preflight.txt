@@ -1,0 +1,256 @@
+Python: /workspace/venvs/hw1-mert/bin/python
+PyTorch: 2.14.0+cu130
+Transformers: 4.38.2
+CUDA available: True
+GPU: NVIDIA GeForce RTX 3060
+Free GPU memory: 11.52 GiB
+Total GPU memory: 11.63 GiB
+
+=== models/mert_classifier.py ===
+
+"""E1：Frozen MERT + 時間平均 + 線性分類器。"""
+
+import torch
+from torch import nn
+from transformers import AutoModel, Wav2Vec2FeatureExtractor
+
+
+MODEL_NAME = "m-a-p/MERT-v1-95M"
+MODEL_REVISION = "12af15fef9d0ac838c3f475bfbbf26d2060dd4f5"
+
+
+class FrozenMERTClassifier(nn.Module):
+    def __init__(
+        self,
+        num_classes=6,
+        model_name=MODEL_NAME,
+        revision=MODEL_REVISION,
+    ):
+        super().__init__()
+
+        self.model_name = model_name
+        self.revision = revision
+
+        # 載入官方波形處理器，包含輸入正規化設定。
+        self.processor = Wav2Vec2FeatureExtractor.from_pretrained(
+            model_name,
+            revision=revision,
+        )
+
+        # 載入預訓練 MERT。
+        # 此模型使用官方 repository 內的自訂模型程式碼。
+        self.encoder = AutoModel.from_pretrained(
+            model_name,
+            revision=revision,
+            trust_remote_code=True,
+        )
+
+        if self.processor.sampling_rate != 24000:
+            raise ValueError("本次資料流程要求模型使用 24000 Hz")
+
+        self.sample_rate = self.processor.sampling_rate
+        self.feature_dim = self.encoder.config.hidden_size
+
+        # 凍結整個 MERT，不計算其參數梯度。
+        self.encoder.requires_grad_(False)
+        self.encoder.eval()
+
+        # 唯一需要學習的部分。
+        self.classifier = nn.Linear(
+            self.feature_dim,
+            num_classes,
+        )
+
+    def train(self, mode=True):
+        """
+        外部呼叫 model.train() 時：
+        分類器進入 train 模式，但 MERT 仍保持 eval 模式。
+        """
+        super().train(mode)
+        self.encoder.eval()
+        return self
+
+    @torch.no_grad()
+    def extract_features(self, waveforms):
+        """
+        輸入：等長的 24 kHz 單聲道波形 [B, S]
+        輸出：每段音訊的特徵 [B, 768]
+        """
+        if waveforms.ndim != 2:
+            raise ValueError(
+                "extract_features 需要 [B, S]，"
+                f"目前收到 {tuple(waveforms.shape)}"
+            )
+
+        if waveforms.shape[0] == 0 or waveforms.shape[1] == 0:
+            raise ValueError("輸入音訊不可為空")
+
+        if not torch.isfinite(waveforms).all():
+            raise ValueError("輸入音訊包含 NaN 或無限值")
+
+        # 官方 processor 使用 CPU 上的 NumPy 波形。
+        cpu_waveforms = waveforms.detach().cpu().float()
+        audio_list = [wave.numpy() for wave in cpu_waveforms]
+
+        inputs = self.processor(
+            audio_list,
+            sampling_rate=self.sample_rate,
+            return_tensors="pt",
+            padding=False,
+            return_attention_mask=True,
+        )
+
+        # 正規化完成後，才搬到 MERT 所在的裝置。
+        device = next(self.encoder.parameters()).device
+        inputs = {
+            name: value.to(device)
+            for name, value in inputs.items()
+        }
+
+        outputs = self.encoder(
+            **inputs,
+            output_hidden_states=False,
+            return_dict=True,
+        )
+
+        # [B, T, 768] → [B, 768]
+        features = outputs.last_hidden_state.mean(dim=1)
+
+        return features
+
+    def forward(self, waveforms):
+        features = self.extract_features(waveforms)
+
+        # 這一行必須放在 no_grad 範圍之外，
+        # 才能計算分類器參數的梯度。
+        logits = self.classifier(features)
+
+        return logits
+
+=== models/mert_layer_probes.py ===
+
+"""E2：凍結 MERT，對第 1～12 層建立獨立線性分類器。"""
+
+from copy import deepcopy
+
+import torch
+from torch import nn
+
+from models.mert_classifier import (
+    FrozenMERTClassifier,
+    MODEL_NAME,
+    MODEL_REVISION,
+)
+
+
+class MERTLayerProbes(FrozenMERTClassifier):
+    def __init__(
+        self,
+        num_classes=6,
+        model_name=MODEL_NAME,
+        revision=MODEL_REVISION,
+    ):
+        # 沿用 E1 的官方 processor、MERT 載入與凍結設定。
+        super().__init__(
+            num_classes=num_classes,
+            model_name=model_name,
+            revision=revision,
+        )
+
+        self.num_layers = self.encoder.config.num_hidden_layers
+
+        # 每層各自持有獨立的分類器。
+        # 使用相同初始數值，減少分類器初始化造成的比較差異。
+        self.classifiers = nn.ModuleList(
+            [
+                deepcopy(self.classifier)
+                for _ in range(self.num_layers)
+            ]
+        )
+
+        # 原本 E1 的單一分類器已由上面的多個分類器取代。
+        del self.classifier
+
+    @torch.no_grad()
+    def extract_features(self, waveforms):
+        """
+        輸入：[B, S]
+        輸出：[B, L, D]
+
+        L：Transformer 層數，本模型為 12。
+        D：特徵維度，本模型為 768。
+        """
+        if waveforms.ndim != 2:
+            raise ValueError(
+                "輸入必須是 [B, S]，"
+                f"目前收到 {tuple(waveforms.shape)}"
+            )
+
+        if waveforms.shape[0] == 0 or waveforms.shape[1] == 0:
+            raise ValueError("輸入音訊不可為空")
+
+        if not torch.isfinite(waveforms).all():
+            raise ValueError("輸入音訊包含 NaN 或無限值")
+
+        # 和 E1 使用相同的波形前處理。
+        cpu_waveforms = waveforms.detach().cpu().float()
+        audio_list = [wave.numpy() for wave in cpu_waveforms]
+
+        inputs = self.processor(
+            audio_list,
+            sampling_rate=self.sample_rate,
+            return_tensors="pt",
+            padding=False,
+            return_attention_mask=True,
+        )
+
+        device = next(self.encoder.parameters()).device
+        inputs = {
+            name: value.to(device)
+            for name, value in inputs.items()
+        }
+
+        # E2 需要取得所有層的表示。
+        outputs = self.encoder(
+            **inputs,
+            output_hidden_states=True,
+            return_dict=True,
+        )
+
+        hidden_states = outputs.hidden_states
+
+        if hidden_states is None:
+            raise RuntimeError("模型沒有回傳 hidden_states")
+
+        if len(hidden_states) != self.num_layers + 1:
+            raise RuntimeError(
+                f"預期 {self.num_layers + 1} 組 hidden states，"
+                f"實際收到 {len(hidden_states)} 組"
+            )
+
+        # 第 0 組是進入第一個 Transformer block 前的表示。
+        # 第 1～12 組才是各個 Transformer block 的輸出。
+        layer_states = hidden_states[1:]
+
+        # 每層：[B, T, D] → [B, D]
+        pooled_layers = [
+            state.mean(dim=1)
+            for state in layer_states
+        ]
+
+        # 12 個 [B, D] → [B, 12, D]
+        features = torch.stack(pooled_layers, dim=1)
+
+        return features
+
+    def forward(self, waveforms):
+        features = self.extract_features(waveforms)
+
+        # 第 i 個分類器只使用第 i 層的特徵。
+        layer_logits = [
+            classifier(features[:, index, :])
+            for index, classifier in enumerate(self.classifiers)
+        ]
+
+        # 12 個 [B, 6] → [B, 12, 6]
+        return torch.stack(layer_logits, dim=1)
