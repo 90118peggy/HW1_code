@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "model_id": "Qwen/Qwen2-Audio-7B-Instruct",
+  "revision": "0a095220c30b7b31434169c3086508ef3ea5bf0a",
+  "split": "validation",
+  "expected_counts": {
+    "dataset_A": 132,
+    "dataset_B": 102
+  },
+  "classes": {
+    "dataset_A": [
+      "1960s",
+      "1970s",
+      "1980s",
+      "1990s",
+      "2000s",
+      "2010s"
+    ],
+    "dataset_B": [
+      "Brazil",
+      "Germany",
+      "Italy",
+      "Spain",
+      "UK",
+      "US"
+    ]
+  },
+  "prompts": {
+    "dataset_A": {
+      "direct": "Listen to the music and predict the US release decade. Allowed labels: 1960s, 1970s, 1980s, 1990s, 2000s, 2010s. Return exactly three distinct allowed labels, ranked from most likely to least likely. Return only a JSON array of three strings, with no explanation or other text.",
+      "acoustic": "Listen to the music and predict the US release decade. Base your prediction on audible characteristics such as instrumentation, rhythm, vocal style, and recording or production sound. Allowed labels: 1960s, 1970s, 1980s, 1990s, 2000s, 2010s. Return exactly three distinct allowed labels, ranked from most likely to least likely. Return only a JSON array of three strings, with no explanation or other text."
+    },
+    "dataset_B": {
+      "direct": "Listen to the music and predict the release market of this 1980s recording. Allowed labels: Brazil, Germany, Italy, Spain, UK, US. Return exactly three distinct allowed labels, ranked from most likely to least likely. Return only a JSON array of three strings, with no explanation or other text.",
+      "acoustic": "Listen to the music and predict the release market of this 1980s recording. Base your prediction on audible characteristics such as instrumentation, rhythm, vocal style, and recording or production sound. Allowed labels: Brazil, Germany, Italy, Spain, UK, US. Return exactly three distinct allowed labels, ranked from most likely to least likely. Return only a JSON array of three strings, with no explanation or other text."
+    }
+  },
+  "prompt_rationale": "direct retains the existing smoke prompt; acoustic adds the same general audible-feature instruction for both datasets, fixed before full validation scoring",
+  "format_retry": {
+    "maximum": 1,
+    "trigger": "initial parser valid_output is false",
+    "suffix": " Format reminder: output ONLY a JSON array containing exactly three distinct allowed label strings in ranked order, without any explanation.",
+    "method": "fresh conversation with same audio and original prompt plus format reminder; no label or feedback provided"
+  },
+  "invalid_rule": "No fallback or guessed label; invalid counts as wrong with full completed-sample denominator; report initial and final separately.",
+  "parser_version": 3,
+  "audio_protocol": "entire recording; mean-to-mono; soxr_hq resampling to processor rate; refuse truncation",
+  "seed": 42,
+  "generation_overrides": {
+    "do_sample": false,
+    "num_beams": 1,
+    "temperature": null,
+    "top_p": null,
+    "top_k": null,
+    "max_new_tokens": 96,
+    "use_cache": true
+  },
+  "quantization": "NF4 language layers, double quantization, FP16 compute; exclude audio_tower, multi_modal_projector, lm_head",
+  "manifest_sha256": {
+    "dataset_A": "620a94cb3f974d377420fbe0b1f9068358206b67fe3ccd2d77bd96117fd1de60",
+    "dataset_B": "4531d4b4d0ac16268ee118a203bed0d99c46ed3e0f052f842d859382e731b76d"
+  },
+  "model_manifest_sha256": "cd3ebfbb86d490d1326db396350b6bf861578b16a2b29c213a629e3c2938af50",
+  "runner_sha256": "3235e657e543ebb2a1e2f12ad66741b29f5b3b6f75bf7ac75b9662da79e0fb89",
+  "smoke_sha256": "9a39a7e6c21452df92cbe93689ee58b3985e99c41c0dbc854d7b6b02397e4973"
+}

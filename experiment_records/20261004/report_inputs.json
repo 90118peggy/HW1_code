@@ -1,0 +1,1457 @@
+{
+  "collected_utc": "2026-10-04T08:01:22.128604+00:00",
+  "scope": "existing validation artifacts; no model rerun; ALM result records independently audited",
+  "experiments": {
+    "A_E0": {
+      "path": "reports/A_baseline_seed42_eval/metrics.json",
+      "sha256": "cf0c688b1ee077cadced14bc7129266adacf3338b50b5f10e747e6cc523641bc",
+      "data": {
+        "dataset": "dataset_A",
+        "split": "validation",
+        "checkpoint_epoch": 7,
+        "samples": 132,
+        "loss": 1.585209821209763,
+        "top1": 0.3333333333333333,
+        "top3": 0.7727272727272727,
+        "class_names": [
+          "1960s",
+          "1970s",
+          "1980s",
+          "1990s",
+          "2000s",
+          "2010s"
+        ],
+        "confusion_matrix": [
+          [
+            15,
+            5,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            9,
+            7,
+            3,
+            0,
+            3,
+            0
+          ],
+          [
+            4,
+            4,
+            5,
+            2,
+            4,
+            3
+          ],
+          [
+            3,
+            3,
+            2,
+            5,
+            7,
+            2
+          ],
+          [
+            1,
+            4,
+            1,
+            2,
+            10,
+            4
+          ],
+          [
+            1,
+            1,
+            1,
+            2,
+            15,
+            2
+          ]
+        ]
+      },
+      "matrix_audit": {
+        "total": 132,
+        "top1_correct": 44,
+        "reconstructed_top1": 0.3333333333333333
+      }
+    },
+    "A_E1": {
+      "path": "reports/A_E1_seed42_eval/metrics.json",
+      "sha256": "20e333f6edb80c67540037fef0b02ed07563f928b89f69b0b2c55e7b34db02ca",
+      "data": {
+        "dataset": "dataset_A",
+        "split": "validation",
+        "checkpoint": "/workspace/HW1_code/outputs/checkpoints/A_E1_seed42/best.pt",
+        "checkpoint_epoch": 13,
+        "class_names": [
+          "1960s",
+          "1970s",
+          "1980s",
+          "1990s",
+          "2000s",
+          "2010s"
+        ],
+        "loss": 1.561766171094143,
+        "top1": 0.3712121212121212,
+        "top3": 0.7575757575757576,
+        "samples": 132,
+        "confusion_matrix": [
+          [
+            16,
+            3,
+            1,
+            0,
+            2,
+            0
+          ],
+          [
+            5,
+            11,
+            3,
+            0,
+            0,
+            3
+          ],
+          [
+            4,
+            3,
+            7,
+            4,
+            3,
+            1
+          ],
+          [
+            1,
+            2,
+            6,
+            4,
+            1,
+            8
+          ],
+          [
+            5,
+            1,
+            2,
+            2,
+            2,
+            10
+          ],
+          [
+            6,
+            1,
+            2,
+            0,
+            4,
+            9
+          ]
+        ]
+      },
+      "matrix_audit": {
+        "total": 132,
+        "top1_correct": 49,
+        "reconstructed_top1": 0.3712121212121212
+      }
+    },
+    "A_E2": {
+      "path": "reports/A_E2_layer06_eval/metrics.json",
+      "sha256": "c0d05ffa7c2dbfdeef5dcc8b03fbdcb5c7bd6f9d2faf7e3401d2fd41b0f007ce",
+      "data": {
+        "dataset": "dataset_A",
+        "split": "validation",
+        "layer": 6,
+        "checkpoint_epoch": 20,
+        "checkpoint": "/workspace/HW1_code/outputs/checkpoints/A_E2_seed42/layer_06_best.pt",
+        "class_names": [
+          "1960s",
+          "1970s",
+          "1980s",
+          "1990s",
+          "2000s",
+          "2010s"
+        ],
+        "loss": 1.4846692437475377,
+        "top1": 0.49242424242424243,
+        "top3": 0.7954545454545454,
+        "samples": 132,
+        "confusion_matrix": [
+          [
+            16,
+            1,
+            1,
+            4,
+            0,
+            0
+          ],
+          [
+            8,
+            8,
+            2,
+            1,
+            1,
+            2
+          ],
+          [
+            4,
+            1,
+            10,
+            5,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            3,
+            11,
+            0,
+            5
+          ],
+          [
+            3,
+            1,
+            2,
+            5,
+            4,
+            7
+          ],
+          [
+            1,
+            1,
+            0,
+            1,
+            3,
+            16
+          ]
+        ]
+      },
+      "matrix_audit": {
+        "total": 132,
+        "top1_correct": 65,
+        "reconstructed_top1": 0.49242424242424243
+      }
+    },
+    "A_E3": {
+      "path": "reports/A_E3_seed42_eval/metrics.json",
+      "sha256": "608e30c73a999b3e42f8d75b663dce654aaa203e40d187e83844b14ddc79e19a",
+      "data": {
+        "experiment": "E3_mert_weighted",
+        "dataset": "dataset_A",
+        "split": "validation",
+        "checkpoint": "/workspace/HW1_code/outputs/checkpoints/A_E3_seed42/best.pt",
+        "checkpoint_epoch": 8,
+        "class_names": [
+          "1960s",
+          "1970s",
+          "1980s",
+          "1990s",
+          "2000s",
+          "2010s"
+        ],
+        "loss": 1.6216595823114568,
+        "top1": 0.3939393939393939,
+        "top3": 0.7575757575757576,
+        "samples": 132,
+        "layer_weights": [
+          {
+            "layer": 1,
+            "weight": 0.0802455022931099
+          },
+          {
+            "layer": 2,
+            "weight": 0.09066248685121536
+          },
+          {
+            "layer": 3,
+            "weight": 0.08521014451980591
+          },
+          {
+            "layer": 4,
+            "weight": 0.07525938004255295
+          },
+          {
+            "layer": 5,
+            "weight": 0.08083914965391159
+          },
+          {
+            "layer": 6,
+            "weight": 0.0869688019156456
+          },
+          {
+            "layer": 7,
+            "weight": 0.07599665224552155
+          },
+          {
+            "layer": 8,
+            "weight": 0.06183401495218277
+          },
+          {
+            "layer": 9,
+            "weight": 0.05920110270380974
+          },
+          {
+            "layer": 10,
+            "weight": 0.07448998838663101
+          },
+          {
+            "layer": 11,
+            "weight": 0.08615934103727341
+          },
+          {
+            "layer": 12,
+            "weight": 0.1431334763765335
+          }
+        ],
+        "confusion_matrix": [
+          [
+            20,
+            1,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            10,
+            5,
+            3,
+            0,
+            1,
+            3
+          ],
+          [
+            5,
+            1,
+            6,
+            7,
+            2,
+            1
+          ],
+          [
+            2,
+            0,
+            5,
+            7,
+            1,
+            7
+          ],
+          [
+            6,
+            2,
+            1,
+            5,
+            2,
+            6
+          ],
+          [
+            5,
+            0,
+            2,
+            0,
+            3,
+            12
+          ]
+        ]
+      },
+      "matrix_audit": {
+        "total": 132,
+        "top1_correct": 52,
+        "reconstructed_top1": 0.3939393939393939
+      }
+    },
+    "A_E4": {
+      "path": "outputs/checkpoints/A_E4_seed42/reload_validation.json",
+      "sha256": "85ea579fddd327e12c2c97bff70602a16035c1826fd24d11e2e86e086a1cb28a",
+      "data": {
+        "loss": 1.4846692437475377,
+        "top1": 0.49242424242424243,
+        "top3": 0.7954545454545454,
+        "samples": 132
+      }
+    },
+    "A_E5_control": {
+      "path": "reports/E5_final_eval/A_control/metrics.json",
+      "sha256": "449c995074f41626dcfd55de899440c451badab41e160b7cb9635f35f528debd",
+      "data": {
+        "dataset": "dataset_A",
+        "variant": "control",
+        "split": "validation",
+        "checkpoint": "/workspace/HW1_code/outputs/checkpoints/A_E5_control_seed42/best.pt",
+        "checkpoint_sha256": "d311738d90967ba786b36af3c8bfee635d82aa74bab0a2c8a3dc40305e3ed31d",
+        "checkpoint_epoch": 19,
+        "class_names": [
+          "1960s",
+          "1970s",
+          "1980s",
+          "1990s",
+          "2000s",
+          "2010s"
+        ],
+        "aggregation": "nine-crop mean logits",
+        "loss": 1.526129696743958,
+        "top1": 0.5378787878787878,
+        "top3": 0.8636363636363636,
+        "samples": 132,
+        "confusion_matrix": [
+          [
+            15,
+            3,
+            0,
+            2,
+            1,
+            1
+          ],
+          [
+            3,
+            16,
+            1,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            4,
+            7,
+            9,
+            2,
+            0
+          ],
+          [
+            1,
+            1,
+            2,
+            13,
+            2,
+            3
+          ],
+          [
+            2,
+            3,
+            1,
+            5,
+            8,
+            3
+          ],
+          [
+            0,
+            2,
+            0,
+            0,
+            8,
+            12
+          ]
+        ],
+        "per_class": [
+          {
+            "class": "1960s",
+            "support": 22,
+            "correct": 15,
+            "recall": 0.6818181818181818,
+            "precision": 0.7142857142857143
+          },
+          {
+            "class": "1970s",
+            "support": 22,
+            "correct": 16,
+            "recall": 0.7272727272727273,
+            "precision": 0.5517241379310345
+          },
+          {
+            "class": "1980s",
+            "support": 22,
+            "correct": 7,
+            "recall": 0.3181818181818182,
+            "precision": 0.6363636363636364
+          },
+          {
+            "class": "1990s",
+            "support": 22,
+            "correct": 13,
+            "recall": 0.5909090909090909,
+            "precision": 0.4482758620689655
+          },
+          {
+            "class": "2000s",
+            "support": 22,
+            "correct": 8,
+            "recall": 0.36363636363636365,
+            "precision": 0.34782608695652173
+          },
+          {
+            "class": "2010s",
+            "support": 22,
+            "correct": 12,
+            "recall": 0.5454545454545454,
+            "precision": 0.631578947368421
+          }
+        ]
+      },
+      "predictions_path": "reports/E5_final_eval/A_control/predictions.csv",
+      "matrix_audit": {
+        "total": 132,
+        "top1_correct": 71,
+        "reconstructed_top1": 0.5378787878787878
+      }
+    },
+    "A_E5_kd": {
+      "path": "reports/E5_final_eval/A_kd/metrics.json",
+      "sha256": "c512f25d87107cb13bb69b22fcc30ab3091af21722ecdf6fafe2453829f0d71f",
+      "data": {
+        "dataset": "dataset_A",
+        "variant": "kd",
+        "split": "validation",
+        "checkpoint": "/workspace/HW1_code/outputs/checkpoints/A_E5_kd_seed42/best.pt",
+        "checkpoint_sha256": "45ff3cd1f8362865855dfea0b121e2953b7abc85a234c2c6eb4c23f38b49d4c0",
+        "checkpoint_epoch": 2,
+        "class_names": [
+          "1960s",
+          "1970s",
+          "1980s",
+          "1990s",
+          "2000s",
+          "2010s"
+        ],
+        "aggregation": "nine-crop mean logits",
+        "loss": 1.408492922782898,
+        "top1": 0.5227272727272727,
+        "top3": 0.8560606060606061,
+        "samples": 132,
+        "confusion_matrix": [
+          [
+            18,
+            1,
+            0,
+            2,
+            0,
+            1
+          ],
+          [
+            7,
+            8,
+            4,
+            1,
+            0,
+            2
+          ],
+          [
+            3,
+            1,
+            11,
+            5,
+            2,
+            0
+          ],
+          [
+            1,
+            1,
+            4,
+            12,
+            0,
+            4
+          ],
+          [
+            4,
+            1,
+            2,
+            4,
+            3,
+            8
+          ],
+          [
+            1,
+            1,
+            0,
+            1,
+            2,
+            17
+          ]
+        ],
+        "per_class": [
+          {
+            "class": "1960s",
+            "support": 22,
+            "correct": 18,
+            "recall": 0.8181818181818182,
+            "precision": 0.5294117647058824
+          },
+          {
+            "class": "1970s",
+            "support": 22,
+            "correct": 8,
+            "recall": 0.36363636363636365,
+            "precision": 0.6153846153846154
+          },
+          {
+            "class": "1980s",
+            "support": 22,
+            "correct": 11,
+            "recall": 0.5,
+            "precision": 0.5238095238095238
+          },
+          {
+            "class": "1990s",
+            "support": 22,
+            "correct": 12,
+            "recall": 0.5454545454545454,
+            "precision": 0.48
+          },
+          {
+            "class": "2000s",
+            "support": 22,
+            "correct": 3,
+            "recall": 0.13636363636363635,
+            "precision": 0.42857142857142855
+          },
+          {
+            "class": "2010s",
+            "support": 22,
+            "correct": 17,
+            "recall": 0.7727272727272727,
+            "precision": 0.53125
+          }
+        ]
+      },
+      "predictions_path": "reports/E5_final_eval/A_kd/predictions.csv",
+      "matrix_audit": {
+        "total": 132,
+        "top1_correct": 69,
+        "reconstructed_top1": 0.5227272727272727
+      }
+    },
+    "B_E0": {
+      "path": "reports/B_baseline_seed42_eval/metrics.json",
+      "sha256": "025ed9369b3151adb6320410e74eb71ff01ea7726f41beca3ddd406b97b4b7c7",
+      "data": {
+        "dataset": "dataset_B",
+        "split": "validation",
+        "checkpoint_epoch": 12,
+        "samples": 102,
+        "loss": 1.7678602489770627,
+        "top1": 0.3333333333333333,
+        "top3": 0.5980392156862745,
+        "class_names": [
+          "Brazil",
+          "Germany",
+          "Italy",
+          "Spain",
+          "UK",
+          "US"
+        ],
+        "confusion_matrix": [
+          [
+            9,
+            3,
+            5,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            7,
+            4,
+            0,
+            3,
+            2
+          ],
+          [
+            3,
+            2,
+            8,
+            0,
+            4,
+            0
+          ],
+          [
+            3,
+            5,
+            4,
+            0,
+            4,
+            1
+          ],
+          [
+            1,
+            3,
+            3,
+            0,
+            10,
+            0
+          ],
+          [
+            2,
+            5,
+            5,
+            0,
+            5,
+            0
+          ]
+        ]
+      },
+      "matrix_audit": {
+        "total": 102,
+        "top1_correct": 34,
+        "reconstructed_top1": 0.3333333333333333
+      }
+    },
+    "B_E1": {
+      "path": "reports/B_E1_seed42_eval/metrics.json",
+      "sha256": "161f53d87d5cc2e3b6e465151240ea8c932e0f79f46bf81360ecb3277da10802",
+      "data": {
+        "dataset": "dataset_B",
+        "split": "validation",
+        "checkpoint": "/workspace/HW1_code/outputs/checkpoints/B_E1_seed42/best.pt",
+        "checkpoint_epoch": 4,
+        "class_names": [
+          "Brazil",
+          "Germany",
+          "Italy",
+          "Spain",
+          "UK",
+          "US"
+        ],
+        "loss": 1.7338515940834494,
+        "top1": 0.3235294117647059,
+        "top3": 0.5882352941176471,
+        "samples": 102,
+        "confusion_matrix": [
+          [
+            5,
+            2,
+            5,
+            0,
+            2,
+            3
+          ],
+          [
+            1,
+            0,
+            3,
+            10,
+            1,
+            2
+          ],
+          [
+            1,
+            0,
+            7,
+            6,
+            0,
+            3
+          ],
+          [
+            2,
+            0,
+            1,
+            12,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            4,
+            6,
+            7,
+            0
+          ],
+          [
+            2,
+            0,
+            2,
+            6,
+            5,
+            2
+          ]
+        ]
+      },
+      "matrix_audit": {
+        "total": 102,
+        "top1_correct": 33,
+        "reconstructed_top1": 0.3235294117647059
+      }
+    },
+    "B_E2": {
+      "path": "reports/B_E2_layer05_eval/metrics.json",
+      "sha256": "a78a9a037f6a3decbb945533cad28525c86e419eb945741aa2bdb02ee0d60fa4",
+      "data": {
+        "dataset": "dataset_B",
+        "split": "validation",
+        "layer": 5,
+        "checkpoint_epoch": 28,
+        "checkpoint": "/workspace/HW1_code/outputs/checkpoints/B_E2_seed42/layer_05_best.pt",
+        "class_names": [
+          "Brazil",
+          "Germany",
+          "Italy",
+          "Spain",
+          "UK",
+          "US"
+        ],
+        "loss": 1.5763635670437532,
+        "top1": 0.4215686274509804,
+        "top3": 0.7745098039215687,
+        "samples": 102,
+        "confusion_matrix": [
+          [
+            11,
+            1,
+            2,
+            0,
+            2,
+            1
+          ],
+          [
+            3,
+            5,
+            3,
+            0,
+            3,
+            3
+          ],
+          [
+            2,
+            2,
+            10,
+            0,
+            2,
+            1
+          ],
+          [
+            8,
+            1,
+            0,
+            1,
+            5,
+            2
+          ],
+          [
+            0,
+            1,
+            4,
+            0,
+            8,
+            4
+          ],
+          [
+            3,
+            2,
+            2,
+            0,
+            2,
+            8
+          ]
+        ]
+      },
+      "matrix_audit": {
+        "total": 102,
+        "top1_correct": 43,
+        "reconstructed_top1": 0.4215686274509804
+      }
+    },
+    "B_E3": {
+      "path": "reports/B_E3_seed42_eval/metrics.json",
+      "sha256": "f3093fa335f2da24581a77fc085a8dc39639260e749948b2d8e71ae06096250d",
+      "data": {
+        "experiment": "E3_mert_weighted",
+        "dataset": "dataset_B",
+        "split": "validation",
+        "checkpoint": "/workspace/HW1_code/outputs/checkpoints/B_E3_seed42/best.pt",
+        "checkpoint_epoch": 11,
+        "class_names": [
+          "Brazil",
+          "Germany",
+          "Italy",
+          "Spain",
+          "UK",
+          "US"
+        ],
+        "loss": 1.6826849474626429,
+        "top1": 0.3235294117647059,
+        "top3": 0.696078431372549,
+        "samples": 102,
+        "layer_weights": [
+          {
+            "layer": 1,
+            "weight": 0.08853834867477417
+          },
+          {
+            "layer": 2,
+            "weight": 0.12404023855924606
+          },
+          {
+            "layer": 3,
+            "weight": 0.1181151270866394
+          },
+          {
+            "layer": 4,
+            "weight": 0.11807112395763397
+          },
+          {
+            "layer": 5,
+            "weight": 0.12027014046907425
+          },
+          {
+            "layer": 6,
+            "weight": 0.09921006858348846
+          },
+          {
+            "layer": 7,
+            "weight": 0.0645948275923729
+          },
+          {
+            "layer": 8,
+            "weight": 0.047989606857299805
+          },
+          {
+            "layer": 9,
+            "weight": 0.04905257374048233
+          },
+          {
+            "layer": 10,
+            "weight": 0.04422011971473694
+          },
+          {
+            "layer": 11,
+            "weight": 0.0528065524995327
+          },
+          {
+            "layer": 12,
+            "weight": 0.07309127599000931
+          }
+        ],
+        "confusion_matrix": [
+          [
+            9,
+            0,
+            2,
+            3,
+            0,
+            3
+          ],
+          [
+            5,
+            2,
+            1,
+            5,
+            0,
+            4
+          ],
+          [
+            2,
+            1,
+            4,
+            8,
+            0,
+            2
+          ],
+          [
+            6,
+            0,
+            0,
+            6,
+            1,
+            4
+          ],
+          [
+            3,
+            0,
+            2,
+            5,
+            4,
+            3
+          ],
+          [
+            3,
+            0,
+            1,
+            4,
+            1,
+            8
+          ]
+        ]
+      },
+      "matrix_audit": {
+        "total": 102,
+        "top1_correct": 33,
+        "reconstructed_top1": 0.3235294117647059
+      }
+    },
+    "B_E4": {
+      "path": "outputs/checkpoints/B_E4_seed42/reload_validation.json",
+      "sha256": "8f7b0f4aa5669fd6f8ff9d448e273a8522766484871998b50b8feb2d5a38af19",
+      "data": {
+        "loss": 1.5763635670437532,
+        "top1": 0.4215686274509804,
+        "top3": 0.7745098039215687,
+        "samples": 102
+      }
+    },
+    "B_E5_control": {
+      "path": "reports/E5_final_eval/B_control/metrics.json",
+      "sha256": "af66e85051dea1de695ab762b489034614962f23cb3755d513d6bd30e7fb72e6",
+      "data": {
+        "dataset": "dataset_B",
+        "variant": "control",
+        "split": "validation",
+        "checkpoint": "/workspace/HW1_code/outputs/checkpoints/B_E5_control_seed42_retry01/best.pt",
+        "checkpoint_sha256": "b75bc1476db6c7ab76e3aa4b528e2758f0c5c70c5059cae89ed0027187ebcae4",
+        "checkpoint_epoch": 0,
+        "class_names": [
+          "Brazil",
+          "Germany",
+          "Italy",
+          "Spain",
+          "UK",
+          "US"
+        ],
+        "aggregation": "nine-crop mean logits",
+        "loss": 1.5763635670437532,
+        "top1": 0.4215686274509804,
+        "top3": 0.7745098039215687,
+        "samples": 102,
+        "confusion_matrix": [
+          [
+            11,
+            1,
+            2,
+            0,
+            2,
+            1
+          ],
+          [
+            3,
+            5,
+            3,
+            0,
+            3,
+            3
+          ],
+          [
+            2,
+            2,
+            10,
+            0,
+            2,
+            1
+          ],
+          [
+            8,
+            1,
+            0,
+            1,
+            5,
+            2
+          ],
+          [
+            0,
+            1,
+            4,
+            0,
+            8,
+            4
+          ],
+          [
+            3,
+            2,
+            2,
+            0,
+            2,
+            8
+          ]
+        ],
+        "per_class": [
+          {
+            "class": "Brazil",
+            "support": 17,
+            "correct": 11,
+            "recall": 0.6470588235294118,
+            "precision": 0.4074074074074074
+          },
+          {
+            "class": "Germany",
+            "support": 17,
+            "correct": 5,
+            "recall": 0.29411764705882354,
+            "precision": 0.4166666666666667
+          },
+          {
+            "class": "Italy",
+            "support": 17,
+            "correct": 10,
+            "recall": 0.5882352941176471,
+            "precision": 0.47619047619047616
+          },
+          {
+            "class": "Spain",
+            "support": 17,
+            "correct": 1,
+            "recall": 0.058823529411764705,
+            "precision": 1.0
+          },
+          {
+            "class": "UK",
+            "support": 17,
+            "correct": 8,
+            "recall": 0.47058823529411764,
+            "precision": 0.36363636363636365
+          },
+          {
+            "class": "US",
+            "support": 17,
+            "correct": 8,
+            "recall": 0.47058823529411764,
+            "precision": 0.42105263157894735
+          }
+        ]
+      },
+      "predictions_path": "reports/E5_final_eval/B_control/predictions.csv",
+      "matrix_audit": {
+        "total": 102,
+        "top1_correct": 43,
+        "reconstructed_top1": 0.4215686274509804
+      }
+    },
+    "B_E5_kd": {
+      "path": "reports/E5_final_eval/B_kd/metrics.json",
+      "sha256": "036dcd95c03e7427fbb6875cdb6add2d8e33cccb3aab3ffdb4001b1f95bcd1a0",
+      "data": {
+        "dataset": "dataset_B",
+        "variant": "kd",
+        "split": "validation",
+        "checkpoint": "/workspace/HW1_code/outputs/checkpoints/B_E5_kd_seed42_retry01/best.pt",
+        "checkpoint_sha256": "8a339d7a4bc1c053ab892f1b8b18e2410c9257f5976d8c0ee82d8837a8ceb3a3",
+        "checkpoint_epoch": 6,
+        "class_names": [
+          "Brazil",
+          "Germany",
+          "Italy",
+          "Spain",
+          "UK",
+          "US"
+        ],
+        "aggregation": "nine-crop mean logits",
+        "loss": 1.546215133339751,
+        "top1": 0.4215686274509804,
+        "top3": 0.7352941176470589,
+        "samples": 102,
+        "confusion_matrix": [
+          [
+            8,
+            1,
+            2,
+            2,
+            1,
+            3
+          ],
+          [
+            1,
+            6,
+            2,
+            1,
+            3,
+            4
+          ],
+          [
+            1,
+            3,
+            8,
+            1,
+            3,
+            1
+          ],
+          [
+            6,
+            2,
+            0,
+            3,
+            5,
+            1
+          ],
+          [
+            0,
+            1,
+            2,
+            0,
+            11,
+            3
+          ],
+          [
+            1,
+            1,
+            2,
+            1,
+            5,
+            7
+          ]
+        ],
+        "per_class": [
+          {
+            "class": "Brazil",
+            "support": 17,
+            "correct": 8,
+            "recall": 0.47058823529411764,
+            "precision": 0.47058823529411764
+          },
+          {
+            "class": "Germany",
+            "support": 17,
+            "correct": 6,
+            "recall": 0.35294117647058826,
+            "precision": 0.42857142857142855
+          },
+          {
+            "class": "Italy",
+            "support": 17,
+            "correct": 8,
+            "recall": 0.47058823529411764,
+            "precision": 0.5
+          },
+          {
+            "class": "Spain",
+            "support": 17,
+            "correct": 3,
+            "recall": 0.17647058823529413,
+            "precision": 0.375
+          },
+          {
+            "class": "UK",
+            "support": 17,
+            "correct": 11,
+            "recall": 0.6470588235294118,
+            "precision": 0.39285714285714285
+          },
+          {
+            "class": "US",
+            "support": 17,
+            "correct": 7,
+            "recall": 0.4117647058823529,
+            "precision": 0.3684210526315789
+          }
+        ]
+      },
+      "predictions_path": "reports/E5_final_eval/B_kd/predictions.csv",
+      "matrix_audit": {
+        "total": 102,
+        "top1_correct": 43,
+        "reconstructed_top1": 0.4215686274509804
+      }
+    }
+  },
+  "selected_candidate_configs": {
+    "outputs/checkpoints/A_E5_control_seed42/run_config.json": {
+      "path": "outputs/checkpoints/A_E5_control_seed42/run_config.json",
+      "sha256": "7b9fe787c696fa2a48f763cfb989fddb7eeb4032b5f627f6c39dee36d68e64a7",
+      "data": {
+        "dataset": "A",
+        "mode": "control",
+        "epochs": 30,
+        "patience": 8,
+        "batch_size": 2,
+        "seed": 42,
+        "output_dir": "/workspace/HW1_code/outputs/checkpoints/A_E5_control_seed42",
+        "temperature": 2.0,
+        "kd_weight": 0.0,
+        "backbone_lr": 1e-05,
+        "classifier_lr": 0.0001,
+        "weight_decay": 0.0001,
+        "gradient_clip_norm": 1.0,
+        "val_batch_size": 2,
+        "chunk_batch_size": 2,
+        "source_checkpoint": "/workspace/HW1_code/outputs/checkpoints/A_E4_seed42/best.pt",
+        "source_sha256": "58584fb982e14753e04b6bbae32ea6bd75e93fdb5a71bd58b4e62c118524498b",
+        "initial_student_sha256": "16173e200092d9f65b9fe627483a5139e514b511ce030f55038ad770ca1e6de5",
+        "training_fingerprint": "394256072524249f2454583e82c51a515795d7ba1ab4c365a589ec77e60f7941",
+        "model_config": {
+          "num_classes": 6,
+          "model_name": "m-a-p/MERT-v1-95M",
+          "revision": "12af15fef9d0ac838c3f475bfbbf26d2060dd4f5",
+          "feature_layer": 6,
+          "unfreeze_last_n": 2
+        },
+        "audio_config": {
+          "sample_rate": 24000,
+          "crop_seconds": 3.69,
+          "eval_chunks": 9,
+          "n_fft": 1024,
+          "hop_length": 256,
+          "n_mels": 128,
+          "f_min": 0.0,
+          "f_max": 12000.0,
+          "log_floor": 1e-10,
+          "mel_scale": "slaney",
+          "mel_norm": "slaney",
+          "center": true,
+          "pad_mode": "reflect"
+        },
+        "encoder_mode": "eval_with_grad",
+        "recording_aggregation": "mean_logits",
+        "sampling_protocol": "epoch_seed=(seed+epoch)%2**32; num_workers=0",
+        "torch_version": "2.14.0+cu130",
+        "transformers_version": "4.38.2"
+      }
+    },
+    "outputs/checkpoints/B_E2_seed42/config.json": {
+      "path": "outputs/checkpoints/B_E2_seed42/config.json",
+      "sha256": "36a3cd35cad58cebd82775686b3a7b7bebcdaea828499e1552214916f968001d",
+      "data": {
+        "dataset": "B",
+        "epochs": 30,
+        "batch_size": 4,
+        "val_batch_size": 2,
+        "chunk_batch_size": 2,
+        "lr": 0.001,
+        "weight_decay": 0.0001,
+        "patience": 8,
+        "seed": 42,
+        "output_dir": "/workspace/HW1_code/outputs/checkpoints/B_E2_seed42",
+        "experiment": "E2_mert_layer_probes",
+        "model_config": {
+          "num_classes": 6,
+          "model_name": "m-a-p/MERT-v1-95M",
+          "revision": "12af15fef9d0ac838c3f475bfbbf26d2060dd4f5"
+        },
+        "audio_config": {
+          "sample_rate": 24000,
+          "crop_seconds": 3.69,
+          "eval_chunks": 9,
+          "n_fft": 1024,
+          "hop_length": 256,
+          "n_mels": 128,
+          "f_min": 0.0,
+          "f_max": 12000.0,
+          "log_floor": 1e-10,
+          "mel_scale": "slaney",
+          "mel_norm": "slaney",
+          "center": true,
+          "pad_mode": "reflect"
+        },
+        "class_names": [
+          "Brazil",
+          "Germany",
+          "Italy",
+          "Spain",
+          "UK",
+          "US"
+        ],
+        "training_fingerprint": "6531201fbf9c359cb376695ecbc2b54026bed172e1f736850f7b307013bc4a40",
+        "layers": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "pooling": "per_layer_time_mean",
+        "recording_aggregation": "per_layer_mean_logits",
+        "head_initialization": "identical_values_independent_parameters",
+        "early_stopping": "per_layer_validation_top1",
+        "torch_version": "2.14.0+cu130",
+        "transformers_version": "4.38.2",
+        "gpu": "NVIDIA GeForce RTX 3060"
+      }
+    },
+    "outputs/checkpoints/B_E2_seed42/selected_layer.json": {
+      "path": "outputs/checkpoints/B_E2_seed42/selected_layer.json",
+      "sha256": "be83c411b5362134b1ac054e565125cfe45a84da6013f87f08ec0f73d96485c6",
+      "data": {
+        "layer": 5,
+        "epoch": 28,
+        "checkpoint": "layer_05_best.pt",
+        "loss": 1.5763635670437532,
+        "top1": 0.4215686274509804,
+        "top3": 0.7745098039215687,
+        "samples": 102
+      }
+    }
+  },
+  "alm_protocol": {
+    "path": "reports/ALM_validation_20261004/protocol.json",
+    "sha256": "db42c0cf4731fd7a5af7e5a09ae3e20616da095f41e16f19849190d0496e72e1",
+    "data": {
+      "schema_version": 1,
+      "model_id": "Qwen/Qwen2-Audio-7B-Instruct",
+      "revision": "0a095220c30b7b31434169c3086508ef3ea5bf0a",
+      "split": "validation",
+      "expected_counts": {
+        "dataset_A": 132,
+        "dataset_B": 102
+      },
+      "classes": {
+        "dataset_A": [
+          "1960s",
+          "1970s",
+          "1980s",
+          "1990s",
+          "2000s",
+          "2010s"
+        ],
+        "dataset_B": [
+          "Brazil",
+          "Germany",
+          "Italy",
+          "Spain",
+          "UK",
+          "US"
+        ]
+      },
+      "prompts": {
+        "dataset_A": {
+          "direct": "Listen to the music and predict the US release decade. Allowed labels: 1960s, 1970s, 1980s, 1990s, 2000s, 2010s. Return exactly three distinct allowed labels, ranked from most likely to least likely. Return only a JSON array of three strings, with no explanation or other text.",
+          "acoustic": "Listen to the music and predict the US release decade. Base your prediction on audible characteristics such as instrumentation, rhythm, vocal style, and recording or production sound. Allowed labels: 1960s, 1970s, 1980s, 1990s, 2000s, 2010s. Return exactly three distinct allowed labels, ranked from most likely to least likely. Return only a JSON array of three strings, with no explanation or other text."
+        },
+        "dataset_B": {
+          "direct": "Listen to the music and predict the release market of this 1980s recording. Allowed labels: Brazil, Germany, Italy, Spain, UK, US. Return exactly three distinct allowed labels, ranked from most likely to least likely. Return only a JSON array of three strings, with no explanation or other text.",
+          "acoustic": "Listen to the music and predict the release market of this 1980s recording. Base your prediction on audible characteristics such as instrumentation, rhythm, vocal style, and recording or production sound. Allowed labels: Brazil, Germany, Italy, Spain, UK, US. Return exactly three distinct allowed labels, ranked from most likely to least likely. Return only a JSON array of three strings, with no explanation or other text."
+        }
+      },
+      "prompt_rationale": "direct retains the existing smoke prompt; acoustic adds the same general audible-feature instruction for both datasets, fixed before full validation scoring",
+      "format_retry": {
+        "maximum": 1,
+        "trigger": "initial parser valid_output is false",
+        "suffix": " Format reminder: output ONLY a JSON array containing exactly three distinct allowed label strings in ranked order, without any explanation.",
+        "method": "fresh conversation with same audio and original prompt plus format reminder; no label or feedback provided"
+      },
+      "invalid_rule": "No fallback or guessed label; invalid counts as wrong with full completed-sample denominator; report initial and final separately.",
+      "parser_version": 3,
+      "audio_protocol": "entire recording; mean-to-mono; soxr_hq resampling to processor rate; refuse truncation",
+      "seed": 42,
+      "generation_overrides": {
+        "do_sample": false,
+        "num_beams": 1,
+        "temperature": null,
+        "top_p": null,
+        "top_k": null,
+        "max_new_tokens": 96,
+        "use_cache": true
+      },
+      "quantization": "NF4 language layers, double quantization, FP16 compute; exclude audio_tower, multi_modal_projector, lm_head",
+      "manifest_sha256": {
+        "dataset_A": "620a94cb3f974d377420fbe0b1f9068358206b67fe3ccd2d77bd96117fd1de60",
+        "dataset_B": "4531d4b4d0ac16268ee118a203bed0d99c46ed3e0f052f842d859382e731b76d"
+      },
+      "model_manifest_sha256": "cd3ebfbb86d490d1326db396350b6bf861578b16a2b29c213a629e3c2938af50",
+      "runner_sha256": "3235e657e543ebb2a1e2f12ad66741b29f5b3b6f75bf7ac75b9662da79e0fb89",
+      "smoke_sha256": "9a39a7e6c21452df92cbe93689ee58b3985e99c41c0dbc854d7b6b02397e4973"
+    }
+  },
+  "limitations": [
+    "Single-seed validation estimates, not held-out test performance.",
+    "Original source model selection is not repeated or altered by this audit.",
+    "Pretrained model pretraining-data overlap cannot be excluded.",
+    "Checkpoint backup location still requires verification; weights were reportedly intentionally removed from this GPU.",
+    "ALM NF4 quantization applies to language layers; full audio tower remains FP16.",
+    "ALM prompts are fixed before full scoring, invalid predictions remain in denominator; initial and retry-final metrics reported separately."
+  ],
+  "alm_status": "Full validation running; partial accuracy omitted. Frozen protocol is included."
+}
